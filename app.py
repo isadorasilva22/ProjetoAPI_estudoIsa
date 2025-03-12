@@ -35,13 +35,13 @@ def createAluno():
     return jsonify(dados)
 
 @app.route('/professores',methods=['POST'])
-def createAluno():
+def createProfessores():
     dados = request.json
     dici['professores'].append(dados)
     return jsonify(dados)
 
 @app.route('/turma',methods=['POST'])
-def createAluno():
+def createTurma():
     dados = request.json
     dici['turma'].append(dados)
     return jsonify(dados)
@@ -61,7 +61,7 @@ def getProfessor():
 @app.route ('/turma', methods=['GET'])
 def getTurma():
     dados = dici['turma']
-    return jsonify
+    return jsonify (dados)
 
 #PUT(UPDATE)
 @app.route("/alunos/<int:idAluno>", methods=['PUT'])
@@ -77,7 +77,7 @@ def updateAlunos(idAluno):
             return jsonify("Aluno não encontrado")
         
 @app.route("/professores/<int:idProfessores>", methods=['PUT'])
-def updateAlunos(idProfessores):
+def updateProfessores(idProfessores):
     professor = dici["professores"]
     for professores in professor :
         if professores['id'] == idProfessores:
@@ -89,8 +89,8 @@ def updateAlunos(idProfessores):
             return jsonify("Professor não encontrado")
         
 @app.route("/turma/<int:idTurma>", methods=['PUT'])
-def updateAlunos(idTurma):
-    turmas = dici["alunos"]
+def updateTurma(idTurma):
+    turmas = dici["Turma"]
     for turma in turmas:
         if turma['id'] == idTurma:
             dados = request.json
