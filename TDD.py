@@ -49,7 +49,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_000_alunos_retorna_lista(self):
         #pega a url /alunos, com o verbo get
-        r = requests.get('http://localhost:5002/alunos')
+        r = requests.get('http://127.0.0.1:5000/alunos')
 
         #o status code foi pagina nao encontrada?
         if r.status_code == 404:
@@ -69,11 +69,11 @@ class TestStringMethods(unittest.TestCase):
 
     def test_001_adiciona_alunos(self):
         #criar dois alunos (usando post na url /alunos)
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'fernando','id':1})
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'roberto','id':2})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'fernando','id':1})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'roberto','id':2})
         
         #pego a lista de alunos (do mesmo jeito que no teste 0)
-        r_lista = requests.get('http://localhost:5002/alunos')
+        r_lista = requests.get('http://127.0.0.1:5000/alunos')
         lista_retornada = r_lista.json()#le o arquivo que o servidor respondeu
                                         #e transforma num dict/lista de python
 
@@ -95,10 +95,10 @@ class TestStringMethods(unittest.TestCase):
 
     def test_002_aluno_por_id(self):
         #cria um aluno 'mario', com id 20
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'mario','id':20})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'mario','id':20})
 
         #consulta a url /alunos/20, pra ver se o aluno está lá
-        resposta = requests.get('http://localhost:5002/alunos/20')
+        resposta = requests.get('http://127.0.0.1:5000/alunos/20')
         dict_retornado = resposta.json() #pego o dicionario retornado
         self.assertEqual(type(dict_retornado),dict)
         self.assertIn('nome',dict_retornado)#o dicionario dict_retornado, que veio do servidor, 
@@ -112,21 +112,21 @@ class TestStringMethods(unittest.TestCase):
     #e o aluno deve desaparecer
     def test_003_reseta(self):
         #criei um aluno, com post
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'cicero','id':29})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'cicero','id':29})
         #peguei a lista
-        r_lista = requests.get('http://localhost:5002/alunos')
+        r_lista = requests.get('http://127.0.0.1:5000/alunos')
         #no momento, a lista tem que ter mais de um aluno
         self.assertTrue(len(r_lista.json()) > 0)
 
         #POST na url reseta: deveria apagar todos os dados do servidor
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
 
         #estou verificando se a url reseta deu pau
         #se voce ainda nao definiu ela, esse cod status nao vai ser 200
         self.assertEqual(r_reset.status_code,200)
 
         #pego de novo a lista
-        r_lista_depois = requests.get('http://localhost:5002/alunos')
+        r_lista_depois = requests.get('http://127.0.0.1:5000/alunos')
         
         #e agora tem que ter 0 elementos
         self.assertEqual(len(r_lista_depois.json()),0)
@@ -145,21 +145,21 @@ class TestStringMethods(unittest.TestCase):
     [20]'''
     def test_004_deleta(self):
         #apago tudo
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
         #crio 3 alunos
-        requests.post('http://localhost:5002/alunos',json={'nome':'cicero','id':29})
-        requests.post('http://localhost:5002/alunos',json={'nome':'lucas','id':28})
-        requests.post('http://localhost:5002/alunos',json={'nome':'marta','id':27})
+        requests.post('http://127.0.0.1:5000/alunos',json={'nome':'cicero','id':29})
+        requests.post('http://127.0.0.1:5000/alunos',json={'nome':'lucas','id':28})
+        requests.post('http://127.0.0.1:5000/alunos',json={'nome':'marta','id':27})
         #pego a lista completa
-        r_lista = requests.get('http://localhost:5002/alunos')
+        r_lista = requests.get('http://127.0.0.1:5000/alunos')
         lista_retornada = r_lista.json()
         #a lista completa tem que ter 3 elementos
         self.assertEqual(len(lista_retornada),3)
         #faço um request com delete, pra deletar o aluno de id 28
-        requests.delete('http://localhost:5002/alunos/28')
+        requests.delete('http://127.0.0.1:5000/alunos/28')
         #pego a lista de novo
-        r_lista2 = requests.get('http://localhost:5002/alunos')
+        r_lista2 = requests.get('http://127.0.0.1:5000/alunos')
         lista_retornada2 = r_lista2.json()
         #e vejo se ficou só um elemento
         self.assertEqual(len(lista_retornada2),2) 
@@ -174,9 +174,9 @@ class TestStringMethods(unittest.TestCase):
         if not acheiMarta or not acheiCicero:
             self.fail("voce parece ter deletado o aluno errado!")
 
-        requests.delete('http://localhost:5002/alunos/27')
+        requests.delete('http://127.0.0.1:5000/alunos/27')
 
-        r_lista3 = requests.get('http://localhost:5002/alunos')
+        r_lista3 = requests.get('http://127.0.0.1:5000/alunos')
         lista_retornada3 = r_lista3.json()
         #e vejo se ficou só um elemento
         self.assertEqual(len(lista_retornada3),1) 
@@ -191,22 +191,22 @@ class TestStringMethods(unittest.TestCase):
     #para alterar o nome do usuário
     def test_005_edita(self):
         #resetei
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         #verifiquei se o reset foi
         self.assertEqual(r_reset.status_code,200)
 
         #criei um aluno
-        requests.post('http://localhost:5002/alunos',json={'nome':'lucas','id':28})
+        requests.post('http://127.0.0.1:5000/alunos',json={'nome':'lucas','id':28})
         #e peguei o dicionario dele
-        r_antes = requests.get('http://localhost:5002/alunos/28')
+        r_antes = requests.get('http://127.0.0.1:5000/alunos/28')
         #o nome enviado foi lucas, o nome recebido tb
         self.assertEqual(r_antes.json()['nome'],'lucas')
         #vou editar. Vou mandar um novo dicionario p/ corrigir o dicionario
         #que já estava no 28 (note que só mandei o nome)
         #para isso, uso o verbo PUT
-        requests.put('http://localhost:5002/alunos/28', json={'nome':'lucas mendes'})
+        requests.put('http://127.0.0.1:5000/alunos/28', json={'nome':'lucas mendes'})
         #pego o novo dicionario do aluno 28
-        r_depois = requests.get('http://localhost:5002/alunos/28')
+        r_depois = requests.get('http://127.0.0.1:5000/alunos/28')
         #agora o nome deve ser lucas mendes
         self.assertEqual(r_depois.json()['nome'],'lucas mendes')
         #mas o id nao mudou
@@ -215,11 +215,11 @@ class TestStringMethods(unittest.TestCase):
     #tenta fazer GET, PUT e DELETE num aluno que nao existe
     def test_006a_id_inexistente_no_put(self):
         #reseto
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         #vejo se nao deu pau resetar
         self.assertEqual(r_reset.status_code,200)
         #estou tentando EDITAR um aluno que nao existe (verbo PUT)
-        r = requests.put('http://localhost:5002/alunos/15',json={'nome':'bowser','id':15})
+        r = requests.put('http://127.0.0.1:5000/alunos/15',json={'nome':'bowser','id':15})
         #tem que dar erro 400 ou 404
         #ou seja, r.status_code tem que aparecer na lista [400,404]
         self.assertIn(r.status_code,[400,404])
@@ -230,11 +230,11 @@ class TestStringMethods(unittest.TestCase):
 
     def test_006b_id_inexistente_no_get(self):
         #reseto
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         #vejo se nao deu pau resetar
         self.assertEqual(r_reset.status_code,200)
         #agora faço o mesmo teste pro GET, a consulta por id
-        r = requests.get('http://localhost:5002/alunos/15')
+        r = requests.get('http://127.0.0.1:5000/alunos/15')
         self.assertIn(r.status_code,[400,404])
         #olhando pra essa linha debaixo, o que está especificado que o servidor deve retornar
         self.assertEqual(r.json()['erro'],'aluno nao encontrado')
@@ -248,10 +248,10 @@ class TestStringMethods(unittest.TestCase):
         
     def test_006c_id_inexistente_no_delete(self):
         #reseto
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         #vejo se nao deu pau resetar
         self.assertEqual(r_reset.status_code,200)
-        r = requests.delete('http://localhost:5002/alunos/15')
+        r = requests.delete('http://127.0.0.1:5000/alunos/15')
         self.assertIn(r.status_code,[400,404])
         self.assertEqual(r.json()['erro'],'aluno nao encontrado')
 
@@ -266,15 +266,15 @@ class TestStringMethods(unittest.TestCase):
     def test_007_criar_com_id_ja_existente(self):
 
         #dou reseta e confiro que deu certo
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
 
         #crio o usuario bond e confiro
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'bond','id':7})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'bond','id':7})
         self.assertEqual(r.status_code,200)
 
         #tento usar o mesmo id para outro usuário
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'james','id':7})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'james','id':7})
         # o erro é muito parecido com o do teste anterior
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'id ja utilizada')
@@ -282,50 +282,50 @@ class TestStringMethods(unittest.TestCase):
 
     #cria alunos sem nome, o que tem que dar erro
     def test_008a_post_sem_nome(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
 
         #tentei criar um aluno, sem enviar um nome
-        r = requests.post('http://localhost:5002/alunos',json={'id':8})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'id':8})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'aluno sem nome')
     
     #tenta editar alunos sem passar nome, o que também
     #tem que dar erro (se vc nao mudar o nome, vai mudar o que?)
     def test_008b_put_sem_nome(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
 
         #criei um aluno sem problemas
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'maximus','id':7})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'maximus','id':7})
         self.assertEqual(r.status_code,200)
 
         #mas tentei editar ele sem mandar o nome
-        r = requests.put('http://localhost:5002/alunos/7',json={'id':7})
+        r = requests.put('http://127.0.0.1:5000/alunos/7',json={'id':7})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'aluno sem nome')
     
 
     
     def test_100_professores_retorna_lista(self):
-        r = requests.get('http://localhost:5002/professores')
+        r = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(type(r.json()),type([]))
     
     def test_100b_nao_confundir_professor_e_aluno(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'fernando','id':1})
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'fernando','id':1})
         self.assertEqual(r.status_code,200)
-        r = requests.post('http://localhost:5002/alunos',json={'nome':'roberto','id':2})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'roberto','id':2})
         self.assertEqual(r.status_code,200)
-        r_lista = requests.get('http://localhost:5002/professores')
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(len(r_lista.json()),0)
-        r_lista_alunos = requests.get('http://localhost:5002/alunos')
+        r_lista_alunos = requests.get('http://127.0.0.1:5000/alunos')
         self.assertEqual(len(r_lista_alunos.json()),2)
 
     def test_101_adiciona_professores(self):
-        r = requests.post('http://localhost:5002/professores',json={'nome':'fernando','id':1})
-        r = requests.post('http://localhost:5002/professores',json={'nome':'roberto','id':2})
-        r_lista = requests.get('http://localhost:5002/professores')
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'fernando','id':1})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'roberto','id':2})
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         achei_fernando = False
         achei_roberto = False
         for professor in r_lista.json():
@@ -339,85 +339,85 @@ class TestStringMethods(unittest.TestCase):
             self.fail('professor roberto nao apareceu na lista de professores')
 
     def test_102_professores_por_id(self):
-        r = requests.post('http://localhost:5002/professores',json={'nome':'mario','id':20})
-        r_lista = requests.get('http://localhost:5002/professores/20')
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'mario','id':20})
+        r_lista = requests.get('http://127.0.0.1:5000/professores/20')
         self.assertEqual(r_lista.json()['nome'],'mario')
 
 
     
     def test_103_adiciona_e_reseta(self):
-        r = requests.post('http://localhost:5002/professores',json={'nome':'cicero','id':29})
-        r_lista = requests.get('http://localhost:5002/professores')
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'cicero','id':29})
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         self.assertTrue(len(r_lista.json()) > 0)
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        r_lista_depois = requests.get('http://localhost:5002/professores')
+        r_lista_depois = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(len(r_lista_depois.json()),0)
 
     def test_104_deleta(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        requests.post('http://localhost:5002/professores',json={'nome':'cicero','id':29})
-        requests.post('http://localhost:5002/professores',json={'nome':'lucas','id':28})
-        r_lista = requests.get('http://localhost:5002/professores')
+        requests.post('http://127.0.0.1:5000/professores',json={'nome':'cicero','id':29})
+        requests.post('http://127.0.0.1:5000/professores',json={'nome':'lucas','id':28})
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(len(r_lista.json()),2)
-        requests.delete('http://localhost:5002/professores/28')
-        r_lista = requests.get('http://localhost:5002/professores')
+        requests.delete('http://127.0.0.1:5000/professores/28')
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(len(r_lista.json()),1)
     
     def test_105_edita(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        requests.post('http://localhost:5002/professores',json={'nome':'lucas','id':28})
-        r_antes = requests.get('http://localhost:5002/professores/28')
+        requests.post('http://127.0.0.1:5000/professores',json={'nome':'lucas','id':28})
+        r_antes = requests.get('http://127.0.0.1:5000/professores/28')
         self.assertEqual(r_antes.json()['nome'],'lucas')
-        requests.put('http://localhost:5002/professores/28', json={'nome':'lucas mendes'})
-        r_depois = requests.get('http://localhost:5002/professores/28')
+        requests.put('http://127.0.0.1:5000/professores/28', json={'nome':'lucas mendes'})
+        r_depois = requests.get('http://127.0.0.1:5000/professores/28')
         self.assertEqual(r_depois.json()['nome'],'lucas mendes')
 
     def test_106_id_inexistente(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        r = requests.put('http://localhost:5002/professores/15',json={'nome':'bowser','id':15})
+        r = requests.put('http://127.0.0.1:5000/professores/15',json={'nome':'bowser','id':15})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'professor nao encontrado')
-        r = requests.get('http://localhost:5002/professores/15')
+        r = requests.get('http://127.0.0.1:5000/professores/15')
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'professor nao encontrado')
-        r = requests.delete('http://localhost:5002/professores/15')
+        r = requests.delete('http://127.0.0.1:5000/professores/15')
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'professor nao encontrado')
 
     def test_107_criar_com_id_ja_existente(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        r = requests.post('http://localhost:5002/professores',json={'nome':'bond','id':7})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'bond','id':7})
         self.assertEqual(r.status_code,200)
-        r = requests.post('http://localhost:5002/professores',json={'nome':'james','id':7})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'james','id':7})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'id ja utilizada')
 
     def test_108_post_ou_put_sem_nome(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
         self.assertEqual(r_reset.status_code,200)
-        r = requests.post('http://localhost:5002/professores',json={'id':8})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'id':8})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'professor sem nome')
-        r = requests.post('http://localhost:5002/professores',json={'nome':'maximus','id':7})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'maximus','id':7})
         self.assertEqual(r.status_code,200)
-        r = requests.put('http://localhost:5002/professores/7',json={'id':7})
+        r = requests.put('http://127.0.0.1:5000/professores/7',json={'id':7})
         self.assertEqual(r.status_code,400)
         self.assertEqual(r.json()['erro'],'professor sem nome')
 
     def test_109_nao_confundir_professor_e_aluno(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
-        r = requests.post('http://localhost:5002/professores',json={'nome':'fernando','id':1})
+        r_reset = requests.post('http://127.0.0.1:5000/reseta')
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'fernando','id':1})
         self.assertEqual(r.status_code,200)
-        r = requests.post('http://localhost:5002/professores',json={'nome':'roberto','id':2})
+        r = requests.post('http://127.0.0.1:5000/professores',json={'nome':'roberto','id':2})
         self.assertEqual(r.status_code,200)
-        r_lista = requests.get('http://localhost:5002/professores')
+        r_lista = requests.get('http://127.0.0.1:5000/professores')
         self.assertEqual(len(r_lista.json()),2)
-        r_lista_alunos = requests.get('http://localhost:5002/alunos')
+        r_lista_alunos = requests.get('http://127.0.0.1:5000/alunos')
         self.assertEqual(len(r_lista_alunos.json()),0)
 
 
