@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 #app.debbug
 #Dicionário
+
 dici = {
     "alunos":[
         {
@@ -48,7 +49,9 @@ def createAluno():
             dici['alunos'].append(dados)
             return jsonify(dados)
         else:
-            print("Erro")
+            return jsonify(["Não foi possível inserir o aluno na turma."])
+
+        
 
 
 
@@ -62,13 +65,13 @@ def createProfessores():
 def createTurma():
     dados = request.json
     print(dados)
+
     for professor in dici["professor"]:
         if professor["id"] == dados["professor_id"]:
             dici['turma'].append(dados)
             return jsonify(dados)
         else:
-            print("Erro")
-
+            return jsonify(["Não foi possível cadastrar o professor na turma."])
 
 #GET(READ)
 @app.route('/alunos', methods=['GET']) #define a rota para a api - precisa obrigatoriamente de uma função
@@ -123,12 +126,6 @@ def updateTurma(idTurma):
         else:
             return jsonify("Turma não encontrada")
         
-
-
-
-
-
-
 
 
 if __name__ == '__main__': #Verifica se está sendo executado pelo python
