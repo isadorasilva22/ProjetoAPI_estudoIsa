@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-
+#app.debbug
 #Dicionário
 dici = {
     "alunos":[
@@ -19,9 +19,10 @@ dici = {
      "turma":[
         {
             "id":3,
-            "nome":"apis"
+            "nome":"api's",
+            "professor_id":1
         }
-    ],
+    ]
 }
 
 app = Flask(__name__) #Criação de uma instância da classe Flask. __name__ representa o nome do módulo atual
@@ -43,8 +44,13 @@ def createProfessores():
 @app.route('/turma',methods=['POST'])
 def createTurma():
     dados = request.json
-    dici['turma'].append(dados)
-    return jsonify(dados)
+    print(dados)
+    for professor in dici["professor"]:
+        if professor["id"] == dados["professor_id"]:
+            dici['turma'].append(dados)
+            return jsonify(dados)
+        else:
+            print("Erro")
 
 
 #GET(READ)
