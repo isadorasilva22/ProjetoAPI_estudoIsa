@@ -5,22 +5,32 @@ dici = {
     "alunos":[
         {
             "id":1,
-            "nome":"caio"
+            "nome":"caio",
+            "idade": 25,
+
+            "data_nascimento": 10/10/2005,
+            "nota_primeiro_semestre": 10.00,
+            "nota_segundo_semestre": 9.00,
+            "media_final": 9.00
         }
     ],
 
     "professor":[
         {
             "id":2,
-            "nome":"rafael"
+            "nome":"rafael",
+            "idade": 15,
+            "materia": "Desenvolvimento web",
+            "observacoes": "Gosto de lesionar"
         }
     ],
 
      "turma":[
         {
             "id":3,
-            "nome":"api's",
-            "professor_id":1
+            "descricao":"api's",
+            "professor_id":1,
+            "ativo": "Ativa"
         }
     ]
 }
