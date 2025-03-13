@@ -7,8 +7,8 @@ dici = {
             "id":1,
             "nome":"caio",
             "idade": 25,
-
-            "data_nascimento": 10/10/2005,
+            "turma_id": 3,
+            "data_nascimento": "10/10/2005",
             "nota_primeiro_semestre": 10.00,
             "nota_segundo_semestre": 9.00,
             "media_final": 9.00
@@ -29,7 +29,7 @@ dici = {
         {
             "id":3,
             "descricao":"api's",
-            "professor_id":1,
+            "professor_id":2,
             "ativo": "Ativa"
         }
     ]
@@ -42,8 +42,13 @@ app = Flask(__name__) #Criação de uma instância da classe Flask. __name__ rep
 @app.route('/alunos',methods=['POST'])
 def createAluno():
     dados = request.json
-    dici['alunos'].append(dados)
-    return jsonify(dados)
+    print(dados)
+    for turma in dici["turma"]:
+        if turma["id"] == dados["turma_id"]:
+            dici['alunos'].append(dados)
+            return jsonify(dados)
+        else:
+            print("Erro")
 
 @app.route('/professor',methods=['POST'])
 def createProfessores():
