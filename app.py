@@ -50,6 +50,8 @@ def createAluno():
         else:
             print("Erro")
 
+
+
 @app.route('/professor',methods=['POST'])
 def createProfessores():
     dados = request.json
