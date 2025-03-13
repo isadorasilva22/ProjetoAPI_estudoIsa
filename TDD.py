@@ -421,22 +421,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(len(r_lista_alunos.json()),0)
 
 
-
-
-        
-
-
-        
-
-
-
-
-
-    
-
-    
-
-
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
         unittest.TextTestRunner(verbosity=2,failfast=True).run(suite)
