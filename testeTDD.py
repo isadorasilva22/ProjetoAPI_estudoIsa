@@ -1,6 +1,3 @@
-@app.route('/professor',methods=['POST'])
-
-
 def createProfessores():
     try:
         dados = request.get_json()  
