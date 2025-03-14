@@ -45,6 +45,8 @@ def createAluno():
         turma_existente = next((turma for turma in dici["turma"] if turma["id"] == dados["turma_id"]), None)
         if not turma_existente:
             return jsonify({"error": "Turma não encontrada."}), 404
+        
+        
 
         dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
         dici['alunos'].append(dados)
