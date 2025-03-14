@@ -1,3 +1,4 @@
+
 @app.route('/professor',methods=['POST'])
 
 
@@ -39,7 +40,7 @@ def createTurma():
         return jsonify({"error"}), 500
 
     
-    def updateAlunos(idAluno):
+def updateAlunos(idAluno):
     try:
         dados = request.get_json()
         if not dados:
