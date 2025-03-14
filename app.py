@@ -19,7 +19,7 @@ dici = {
             "nome": "rafael",
             "idade": 15,
             "materia": "Desenvolvimento web",
-            "observacoes": "Gosto de lesionar"
+            "observacoes": "Gosto de lecionar"
         }
     ],
     "turma": [
