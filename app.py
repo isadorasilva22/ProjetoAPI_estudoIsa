@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, request
-#app.debbug
-#Dicionário
 
 dici = {
-    "alunos":[
+    "alunos": [
         {
-            "id":1,
-            "nome":"caio",
+            "id": 1,
+            "nome": "caio",
             "idade": 25,
             "turma_id": 3,
             "data_nascimento": "10/10/2005",
@@ -15,125 +13,126 @@ dici = {
             "media_final": 9.00
         }
     ],
-
-    "professor":[
+    "professor": [
         {
-            "id":2,
-            "nome":"rafael",
+            "id": 2,
+            "nome": "rafael",
             "idade": 15,
             "materia": "Desenvolvimento web",
             "observacoes": "Gosto de lesionar"
         }
     ],
-
-     "turma":[
+    "turma": [
         {
-            "id":3,
-            "descricao":"api's",
-            "professor_id":2,
+            "id": 3,
+            "descricao": "api's",
+            "professor_id": 2,
             "ativo": "Ativa"
         }
     ]
 }
 
-app = Flask(__name__) #Criação de uma instância da classe Flask. __name__ representa o nome do módulo atual
+app = Flask(__name__)
 
-
-#POST (CREATE)
-@app.route('/alunos',methods=['POST'])
+# POST (CREATE)
+@app.route('/alunos', methods=['POST'])
 def createAluno():
-    dados = request.json
-    print(dados)
-    for turma in dici["turma"]:
-        if turma["id"] == dados["turma_id"]:
-            dici['alunos'].append(dados)
-            return jsonify(dados)
-        else:
-            return jsonify(["Não foi possível inserir o aluno na turma."])
-
+    try:
+        dados = request.json
+        if not dados.get("turma_id"): #Perguntar pro Romário
+            return jsonify({"error": "O campo 'turma_id' é obrigatório."}), 400
         
+        turma_existente = next((turma for turma in dici["turma"] if turma["id"] == dados["turma_id"]), None)
+        if not turma_existente:
+            return jsonify({"error": "Turma não encontrada."}), 404
 
+        dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
+        dici['alunos'].append(dados)
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-
-@app.route('/professor',methods=['POST'])
+@app.route('/professor', methods=['POST'])
 def createProfessores():
-    dados = request.json
-    dici['professor'].append(dados)
-    return jsonify(dados)
+    try:
+        dados = request.json
+        dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
+        dici['professor'].append(dados)
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-@app.route('/turma',methods=['POST'])
+@app.route('/turma', methods=['POST'])
 def createTurma():
-    dados = request.json
-    print(dados)
+    try:
+        dados = request.json
+        professor_existente = next((professor for professor in dici["professor"] if professor["id"] == dados["professor_id"]), None)
+        if not professor_existente:
+            return jsonify({"error": "Professor não encontrado."}), 404
 
-    for professor in dici["professor"]:
-        if professor["id"] == dados["professor_id"]:
-            dici['turma'].append(dados)
-            return jsonify(dados)
-        else:
-            return jsonify(["Não foi possível cadastrar o professor na turma."])
+        dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
+        dici['turma'].append(dados)
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-#GET(READ)
-@app.route('/alunos', methods=['GET']) #define a rota para a api - precisa obrigatoriamente de uma função
+# GET (READ)
+@app.route('/alunos', methods=['GET'])
 def getAluno():
     dados = dici['alunos']
-    return jsonify(dados) #retorna os dados em formato json
+    return jsonify(dados)
 
 @app.route("/professor", methods=['GET'])
 def getProfessor():
     dados = dici['professor']
     return jsonify(dados)
 
-@app.route ('/turma', methods=['GET'])
+@app.route('/turma', methods=['GET'])
 def getTurma():
     dados = dici['turma']
     return jsonify (dados)
 
-#PUT(UPDATE)
+# PUT (UPDATE)
 @app.route("/alunos/<int:idAluno>", methods=['PUT'])
 def updateAlunos(idAluno):
-    alunos = dici["alunos"]
-    for aluno in alunos:
-        if aluno['id'] == idAluno:
-            dados = request.json
-            aluno["id"] = dados['id']
-            aluno['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Aluno não encontrado")
+    try:
+        aluno = next((aluno for aluno in dici["alunos"] if aluno["id"] == idAluno), None)
+        if not aluno:
+            return jsonify({"error": "Aluno não encontrado"}), 404
         
+        dados = request.json
+        aluno.update(dados)
+        return jsonify(aluno)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/professor/<int:idProfessor>", methods=['PUT'])
 def updateProfessores(idProfessor):
-    professor = dici["professor"]
-    for professor in professor :
-        if professor['id'] == idProfessor:
-            dados = request.json
-            professor["id"] = dados['id']
-            professor['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Professor não encontrado")
+    try:
+        professor = next((professor for professor in dici["professor"] if professor["id"] == idProfessor), None)
+        if not professor:
+            return jsonify({"error": "Professor não encontrado"}), 404
         
+        dados = request.json
+        professor.update(dados)
+        return jsonify(professor)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/turma/<int:idTurma>", methods=['PUT'])
 def updateTurma(idTurma):
-    turmas = dici["Turma"]
-    for turma in turmas:
-        if turma['id'] == idTurma:
-            dados = request.json
-            turma["id"] = dados['id']
-            turma['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Turma não encontrada")
+    try:
+        turma = next((turma for turma in dici["turma"] if turma["id"] == idTurma), None)
+        if not turma:
+            return jsonify({"error": "Turma não encontrada"}), 404
         
+        dados = request.json
+        turma.update(dados)
+        return jsonify(turma)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-if __name__ == '__main__': #Verifica se está sendo executado pelo python
-    app.run(debug=True) #Se estiver sendo executado, ent app.run inicia o servidor de desenv do flask
-#O argumento debug=True ativa o modo de depuração, o que é útil durante o desenvolvimento, pois fornece mensagens de erro detalhadas e reinicia
-#automaticamente o servidor quando o código é alterado.
 
-
-
-# Todos do grupo vai ter que fazer esse processo
-#vai ter que ter 3 post(create), delete, get(read), put(update) - crud para professor, aluno e turma
+if __name__ == '__main__':
+    app.run(debug=True)
