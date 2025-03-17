@@ -34,18 +34,27 @@ dici = {
 
 app = Flask(__name__)
 
+def verificar_duplicacao(id, lista, tipo):
+    if any(item['id'] == id for item in lista):
+        return jsonify({"error": f"{tipo} com ID {id} já existe."}), 400
+    return None
+
 # POST (CREATE)
 @app.route('/alunos', methods=['POST'])
 def createAluno():
     try:
         dados = request.json
-        if not dados.get("turma_id"): #Perguntar pro Romário
+        
+        if not dados.get("turma_id"): 
             return jsonify({"error": "O campo 'turma_id' é obrigatório."}), 400
         
         turma_existente = next((turma for turma in dici["turma"] if turma["id"] == dados["turma_id"]), None)
         if not turma_existente:
             return jsonify({"error": "Turma não encontrada."}), 404
         
+        duplicacao = verificar_duplicacao(dados['id'], dici["alunos"], "Aluno")
+        if duplicacao:
+            return duplicacao
         
 
         dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
@@ -60,6 +69,11 @@ def createProfessores():
         dados = request.json
         dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
         dici['professor'].append(dados)
+
+        duplicacao = verificar_duplicacao(dados['id'], dici["professores"], "Professor")
+        if duplicacao:
+            return duplicacao
+        
         return jsonify(dados), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -71,6 +85,10 @@ def createTurma():
         professor_existente = next((professor for professor in dici["professor"] if professor["id"] == dados["professor_id"]), None)
         if not professor_existente:
             return jsonify({"error": "Professor não encontrado."}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["turma"], "Turma")
+        if duplicacao:
+            return duplicacao
 
         dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
         dici['turma'].append(dados)
@@ -102,6 +120,10 @@ def updateAlunos(idAluno):
         if not aluno:
             return jsonify({"error": "Aluno não encontrado"}), 404
         
+        duplicacao = verificar_duplicacao(dados['id'], dici["alunos"], "Aluno")
+        if duplicacao:
+            return duplicacao
+        
         dados = request.json
         aluno.update(dados)
         return jsonify(aluno)
@@ -115,6 +137,10 @@ def updateProfessores(idProfessor):
         if not professor:
             return jsonify({"error": "Professor não encontrado"}), 404
         
+        duplicacao = verificar_duplicacao(dados['id'], dici["professor"], "Professor")
+        if duplicacao:
+            return duplicacao
+        
         dados = request.json
         professor.update(dados)
         return jsonify(professor)
@@ -127,6 +153,10 @@ def updateTurma(idTurma):
         turma = next((turma for turma in dici["turma"] if turma["id"] == idTurma), None)
         if not turma:
             return jsonify({"error": "Turma não encontrada"}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["turma"], "Turma")
+        if duplicacao:
+            return duplicacao
         
         dados = request.json
         turma.update(dados)
