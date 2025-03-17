@@ -1,44 +1,8 @@
 import requests
 import unittest
 
+
 class TestStringMethods(unittest.TestCase):
-
-#Testar retorno
-    def test_retorna_lista_alunos(self):
-        r = requests.get('http://127.0.0.1:5000/alunos')
-        if r.status_code == 404:
-            return self.fail("Voce nao definiu a pagina '/alunos' no seu server")
-            
-        try:
-            obj_retornado = r.json()
-        except:
-            self.fail("Era esperado um objeto JSON")
-        
-        self.assertEqual(type(obj_retornado),type([]))
-
-    def test_retorna_lista_professores(self):
-        r = requests.get('http://127.0.0.1:5000/professor')
-        if r.status_code == 404:
-            self.fail("Voce nao definiu a pagina '/professor' no seu server")
-
-        try:
-            obj_retornado = r.json()
-        except:
-            self.fail("Era esperado um objeto JSON")
-        
-        self.assertEqual(type(obj_retornado),type([]))    
-
-    def test_retorna_lista_turma(self):
-        r = requests.get('http://127.0.0.1:5000/turma')
-        if r.status_code == 404:
-            self.fail("Voce nao definiu a pagina '/turma' no seu server")
-
-        try:
-            obj_retornado = r.json()
-        except:
-            self.fail("Era esperado um objeto JSON")
-        
-        self.assertEqual(type(obj_retornado),type([]))
 
 #Testar criação
 
@@ -47,7 +11,8 @@ class TestStringMethods(unittest.TestCase):
             'id':2,
             'nome':'Caio',
             'idade':26, 
-            'materia': "Desenvolvimento de APIs"})
+            'materia': "Desenvolvimento de APIs",
+            'observacoes': "Flask"})
             
         if r.status_code != 201:
             self.fail(f"Erro ao criar professor Caio. Status Code: {r.status_code}")
@@ -56,7 +21,8 @@ class TestStringMethods(unittest.TestCase):
             'id':3,
             'nome':'Mariana',
             'idade':26, 
-            'materia': "Matemática Aplica"})
+            'materia': "Matemática Aplica",
+            'observacoes': "Operadores"})
             
         if r.status_code != 201:
             self.fail(f"Erro ao criar professor Mariana. Status Code: {r.status_code}")
@@ -78,6 +44,18 @@ class TestStringMethods(unittest.TestCase):
             self.fail('Professor Caio não apareceu na lista de professores')
         if not achei_mari:
             self.fail('Professora Matemática Aplicada não apareceu na lista de professores')
+
+    def test_retorna_lista_professores(self):
+        r = requests.get('http://127.0.0.1:5000/professor')
+        if r.status_code == 404:
+            self.fail("Voce nao definiu a pagina '/professor' no seu server")
+
+        try:
+            obj_retornado = r.json()
+        except:
+            self.fail("Era esperado um objeto JSON")
+        
+        self.assertEqual(type(obj_retornado),type([]))   
 
 
     def test_criar_turma(self):
@@ -117,6 +95,19 @@ class TestStringMethods(unittest.TestCase):
         if not achei_mat:
             self.fail('Turma Matemática Aplicada não apareceu na lista de turma')
 
+
+    def test_retorna_lista_turma(self):
+        r = requests.get('http://127.0.0.1:5000/turma')
+        if r.status_code == 404:
+            self.fail("Voce nao definiu a pagina '/turma' no seu server")
+
+        try:
+            obj_retornado = r.json()
+        except:
+            self.fail("Era esperado um objeto JSON")
+        
+        self.assertEqual(type(obj_retornado),type([]))
+
     def test_criar_aluno(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': 4,
@@ -126,7 +117,7 @@ class TestStringMethods(unittest.TestCase):
             'nota_primeiro_semestre': 9,
             'nota_segundo_semestre': 8,
             'media_final': 8.5,
-            'turma_id': 2
+            'turma_id': 1
         })
         if r.status_code != 201:
             self.fail(f"Erro ao criar aluno José. Status Code: {r.status_code}")
@@ -139,7 +130,7 @@ class TestStringMethods(unittest.TestCase):
             'nota_primeiro_semestre': 10,
             'nota_segundo_semestre': 8,
             'media_final': 9,
-            'turma_id': 3
+            'turma_id': 1
         })
         if r.status_code != 201:
             self.fail(f"Erro ao criar aluna Letícia. Status Code: {r.status_code}")
@@ -161,6 +152,18 @@ class TestStringMethods(unittest.TestCase):
             self.fail('Aluno José não apareceu na lista de alunos')
         if not achei_leticia:
             self.fail('Aluna Letícia não apareceu na lista de alunos')
+    
+    def test_retorna_lista_alunos(self):
+        r = requests.get('http://127.0.0.1:5000/alunos')
+        if r.status_code == 404:
+            return self.fail("Voce nao definiu a pagina '/alunos' no seu server")
+            
+        try:
+            obj_retornado = r.json()
+        except:
+            self.fail("Era esperado um objeto JSON")
+        
+        self.assertEqual(type(obj_retornado),type([]))
 
         
 def runTests():

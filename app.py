@@ -18,8 +18,8 @@ dici = {
             "id": 1,
             "nome": "Nome do professor",
             "idade": 0,
-            "materia": "Nome da matéria",
-            "observacoes": "Observação sobre o professor"
+            "materia": "Nome da materia",
+            "observacoes": "Observacao sobre o professor"
         }
     ],
     "turma": [
@@ -67,10 +67,10 @@ def createAluno():
 def createProfessores():
     try:
         dados = request.json
-        dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
+        # dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
         dici['professor'].append(dados)
 
-        duplicacao = verificar_duplicacao(dados['id'], dici["professores"], "Professor")
+        duplicacao = verificar_duplicacao(dados['id'], dici["professor"], "Professor")
         if duplicacao:
             return duplicacao
         
@@ -90,7 +90,7 @@ def createTurma():
         if duplicacao:
             return duplicacao
 
-        dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
+        # dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
         dici['turma'].append(dados)
         return jsonify(dados), 201
     except Exception as e:
