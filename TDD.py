@@ -52,51 +52,51 @@ Testes 100 a 109: Teremos as URLs análogas para professores.
 class TestStringMethods(unittest.TestCase):
 
 
-    def test_000_alunos_retorna_lista(self):
-        #pega a url /alunos, com o verbo get
-        r = requests.get('http://127.0.0.1:5000/alunos')
+    # def test_000_alunos_retorna_lista(self):
+        # #pega a url /alunos, com o verbo get
+        # r = requests.get('http://127.0.0.1:5000/alunos')
 
-        #o status code foi pagina nao encontrada?
-        if r.status_code == 404:
-            self.fail("voce nao definiu a pagina /alunos no seu server")
+        # #o status code foi pagina nao encontrada?
+        # if r.status_code == 404:
+        #     self.fail("voce nao definiu a pagina /alunos no seu server")
 
-        try:
-            obj_retornado = r.json()
-            #r.json() é o jeito da biblioteca requests
-            #de pegar o arquivo que veio e transformar
-            #em lista ou dicionario.
-            #Vou dar erro se isso nao for possivel
-        except:
-            self.fail("queria um json mas voce retornou outra coisa")
+        # try:
+        #     obj_retornado = r.json()
+        #     #r.json() é o jeito da biblioteca requests
+        #     #de pegar o arquivo que veio e transformar
+        #     #em lista ou dicionario.
+        #     #Vou dar erro se isso nao for possivel
+        # except:
+        #     self.fail("queria um json mas voce retornou outra coisa")
 
-        #no caso, tem que ser uma lista
-        self.assertEqual(type(obj_retornado),type([]))
+        # #no caso, tem que ser uma lista
+        # self.assertEqual(type(obj_retornado),type([]))
 
-    # def test_001_adiciona_alunos(self):
-    #     #criar dois alunos (usando post na url /alunos)
-    #     r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'fernando','id':1})
-    #     r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'roberto','id':2})
+    def test_001_adiciona_alunos(self):
+        #criar dois alunos (usando post na url /alunos)
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'fernando','id':1})
+        r = requests.post('http://127.0.0.1:5000/alunos',json={'nome':'roberto','id':2})
         
-    #     #pego a lista de alunos (do mesmo jeito que no teste 0)
-    #     r_lista = requests.get('http://127.0.0.1:5000/alunos')
-    #     lista_retornada = r_lista.json()#le o arquivo que o servidor respondeu
-    #                                     #e transforma num dict/lista de python
+        #pego a lista de alunos (do mesmo jeito que no teste 0)
+        r_lista = requests.get('http://127.0.0.1:5000/alunos')
+        lista_retornada = r_lista.json()#le o arquivo que o servidor respondeu
+                                        #e transforma num dict/lista de python
 
-    #     #faço um for para garantir que as duas pessoas que eu criei 
-    #     #aparecem
-    #     achei_fernando = False
-    #     achei_roberto = False
-    #     for aluno in lista_retornada:
-    #         if aluno['nome'] == 'fernando':
-    #             achei_fernando = True
-    #         if aluno['nome'] == 'roberto':
-    #             achei_roberto = True
+        #faço um for para garantir que as duas pessoas que eu criei 
+        #aparecem
+        achei_fernando = False
+        achei_roberto = False
+        for aluno in lista_retornada:
+            if aluno['nome'] == 'fernando':
+                achei_fernando = True
+            if aluno['nome'] == 'roberto':
+                achei_roberto = True
         
-    #     #se algum desses "achei" nao for True, dou uma falha
-    #     if not achei_fernando:
-    #         self.fail('aluno fernando nao apareceu na lista de alunos')
-    #     if not achei_roberto:
-    #         self.fail('aluno roberto nao apareceu na lista de alunos')
+        #se algum desses "achei" nao for True, dou uma falha
+        if not achei_fernando:
+            self.fail('aluno fernando nao apareceu na lista de alunos')
+        if not achei_roberto:
+            self.fail('aluno roberto nao apareceu na lista de alunos')
 
     # def test_002_aluno_por_id(self):
     #     #cria um aluno 'mario', com id 20
