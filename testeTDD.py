@@ -4,7 +4,6 @@ import unittest
 
 class TestStringMethods(unittest.TestCase):
 
-#Testar criação
 
     def test_campo_professor_nome_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
