@@ -4,30 +4,30 @@ dici = {
     "alunos": [
         {
             "id": 1,
-            "nome": "caio",
-            "idade": 25,
-            "turma_id": 3,
-            "data_nascimento": "10/10/2005",
-            "nota_primeiro_semestre": 10.00,
-            "nota_segundo_semestre": 9.00,
-            "media_final": 9.00
+            "nome": "string",
+            "idade": 0,
+            "data_nascimento": "string",
+            "nota_primeiro_semestre": 0,
+            "nota_segundo_semestre": 0,
+            "media_final": 0,
+            "turma_id": 1
         }
     ],
     "professor": [
         {
-            "id": 2,
-            "nome": "rafael",
-            "idade": 15,
-            "materia": "Desenvolvimento web",
+            "id": 1,
+            "nome": "string",
+            "idade": 0,
+            "materia": "string",
             "observacoes": "Gosto de lecionar"
         }
     ],
     "turma": [
         {
-            "id": 3,
-            "descricao": "api's",
-            "professor_id": 2,
-            "ativo": "Ativa"
+            "id": 1,
+            "descricao": "string",
+            "professor_id": 1,
+            "ativo": "string"
         }
     ]
 }
