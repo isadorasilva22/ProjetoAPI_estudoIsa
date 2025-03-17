@@ -4,9 +4,9 @@ dici = {
     "alunos": [
         {
             "id": 1,
-            "nome": "string",
+            "nome": "Nome do aluno",
             "idade": 0,
-            "data_nascimento": "string",
+            "data_nascimento": "Data de nascimento",
             "nota_primeiro_semestre": 0,
             "nota_segundo_semestre": 0,
             "media_final": 0,
@@ -16,18 +16,18 @@ dici = {
     "professor": [
         {
             "id": 1,
-            "nome": "string",
+            "nome": "Nome do professor",
             "idade": 0,
-            "materia": "string",
-            "observacoes": "Gosto de lecionar"
+            "materia": "Nome da matéria",
+            "observacoes": "Observação sobre o professor"
         }
     ],
     "turma": [
         {
             "id": 1,
-            "descricao": "string",
+            "descricao": "Descriçaõ da turma",
             "professor_id": 1,
-            "ativo": "string"
+            "ativo": "Status"
         }
     ]
 }
