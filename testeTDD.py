@@ -23,6 +23,7 @@ class TestStringMethods(unittest.TestCase):
             'idade':26, 
             'materia': "Matemática Aplica",
             'observacoes': "Operadores"})
+        
             
         if r.status_code != 201:
             self.fail(f"Erro ao criar professor Mariana. Status Code: {r.status_code}")
@@ -77,7 +78,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 201:
             self.fail(f"Erro ao criar turma Matemática Aplicada. Status Code: {r.status_code}")
                 
-            r_lista = requests.get('http://127.0.0.1:5000/turma')
+        r_lista = requests.get('http://127.0.0.1:5000/turma')
         if r_lista.status_code != 200:
             self.fail(f"Erro ao obter a lista de turmas. Status Code: {r_lista.status_code}")
                 

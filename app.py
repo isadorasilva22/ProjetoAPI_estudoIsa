@@ -68,11 +68,12 @@ def createProfessores():
     try:
         dados = request.json
         # dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
-        dici['professor'].append(dados)
 
         duplicacao = verificar_duplicacao(dados['id'], dici["professor"], "Professor")
         if duplicacao:
             return duplicacao
+        
+        dici['professor'].append(dados)
         
         return jsonify(dados), 201
     except Exception as e:
