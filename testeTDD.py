@@ -175,10 +175,8 @@ if __name__ == '__main__':
     runTests()
  
 
-# Testar criação
-# Testar id duplicado 
-# Testar cadastros repetidos - Como diferenciar/ verificar (ex: campo RA)?
-# Testar dado (chave) repetido
+
+
 # Testar campos nulos
 # Testar Atualizar
 # Testar Apagar
