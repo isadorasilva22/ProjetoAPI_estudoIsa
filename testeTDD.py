@@ -49,6 +49,40 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo observacoes informado é obrigatório.', r.json()['error'])
 
+    def test_update_professor_successo(self):
+        r = requests.post('http://127.0.0.1:5000/professor', json={ 
+            "id": 10,
+            "nome": "Romário",
+            "idade": 30,
+            "materia": "Desenvolvimento Web",
+            "observacoes": "Nenhuma"
+        })
+
+       
+        assert r.status_code in [200, 201]
+
+        updated_r = {
+            "id": 10,
+            "nome": "Romário Silva",
+            "idade": 30,
+            "materia": "Desenvolvimento Web",
+            "observacoes": "Nenhuma"
+        }
+        
+        response = requests.put('http://127.0.0.1:5000/professor/10', json=updated_r, headers={"Content-Type": "application/json"})
+       
+
+        #tá faltando um get
+        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+
+        updated_professor = response.json()
+        assert updated_professor['nome'] == "Romário Silva"
+        assert updated_professor['idade'] == 30
+        assert updated_professor['materia'] == "Desenvolvimento Web"
+        
+        get_response = requests.get('http://127.0.0.1:5000/professor')
+        assert get_response.status_code == 200        
+
     def test_delete_professor(self): 
         r = requests.post('http://127.0.0.1:5000/professor', json={
             'id':8,
@@ -161,6 +195,38 @@ class TestStringMethods(unittest.TestCase):
         })
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo ativo informado é obrigatório.', r.json()['error'])
+
+    def test_update_turma_successo(self):
+        r = requests.post('http://127.0.0.1:5000/turma', json={ 
+            "id": 10,
+            "descricao": "Desenvolvimento Mobile",
+            "professor_id": 1,
+            "ativo": "Ativo"
+        })
+
+       
+        assert r.status_code in [200, 201]
+
+        updated_r = {
+            "id": 10,
+            "descricao": "Desenvolvimento Mobile - Kotlin",
+            "professor_id": 1,
+            "ativo": "Desativado"
+        }
+        
+        response = requests.put('http://127.0.0.1:5000/turma/10', json=updated_r, headers={"Content-Type": "application/json"})
+       
+
+        #tá faltando um get
+        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+
+        updated_turma = response.json()
+        assert updated_turma['descricao'] == "Desenvolvimento Mobile - Kotlin"
+        assert updated_turma['professor_id'] == 1
+        assert updated_turma['ativo'] == "Desativado"
+        
+        get_response = requests.get('http://127.0.0.1:5000/turma')
+        assert get_response.status_code == 200 
 
     def test_delete_turma(self): 
         r = requests.post('http://127.0.0.1:5000/turma', json={
