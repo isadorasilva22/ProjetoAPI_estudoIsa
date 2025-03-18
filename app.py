@@ -142,7 +142,7 @@ def updateAlunos(idAluno):
         
         aluno = next((aluno for aluno in dici["alunos"] if aluno["id"] == idAluno), None)
         if not aluno:
-            return jsonify({"error": "Aluno não encontrado"}), 404
+            return jsonify({"error": "Aluno nao encontrado"}), 404
         
         duplicacao = verificar_duplicacao(dados['id'], dici["alunos"], "Aluno")
         if duplicacao:
