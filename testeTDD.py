@@ -335,7 +335,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo turma_id informado é obrigatório.', r.json()['error'])
     
     def test_update_aluno_successo(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:5000/alunos', json={ #descobrir pq o "r" está apagado
             "id": 10,
             "nome": "João",
             "idade": 20,
@@ -357,13 +357,17 @@ class TestStringMethods(unittest.TestCase):
             "turma_id": 1
         }
         
-        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r)
-        
-        assert response.status_code == 200
-        updated_aluno = response.get_json()
-        assert updated_aluno['nome'] == "João Silva"
+        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"content-Type": "application/json"})
+
+        #tá faltando um get
+
+        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+        updated_aluno = response.json()
+        assert updated_aluno['nome'] == "João"
         assert updated_aluno['idade'] == 21
         assert updated_aluno['media_final'] == 8.75
+        
+        
 
     def test_delete_aluno(self): 
         r = requests.post('http://127.0.0.1:5000/alunos', json={
