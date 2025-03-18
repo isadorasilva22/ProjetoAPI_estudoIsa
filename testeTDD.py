@@ -49,13 +49,43 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo observacoes informado é obrigatório.', r.json()['error'])
 
+    def test_delete_professor(self): 
+        r = requests.post('http://127.0.0.1:5000/professor', json={
+            'id':8,
+            'nome':'Alessandra',
+            'idade':63, 
+            'materia': "Geografia",
+            'observacoes': "Altitude e latitude"
+        })
+        if r.status_code != 201:
+            self.fail(f"Erro ao criar professora Alessandra. Status Code: {r.status_code}")
+
+        professor_criado = r.json()
+        professor_id = professor_criado['id']
+
+        r = requests.delete(f'http://127.0.0.1:5000/professor/{professor_id}')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Professor com ID', r.json()['message'])
+
+        r_lista = requests.get('http://127.0.0.1:5000/professor')
+        self.assertEqual(r_lista.status_code, 200)
+        lista_retornada = r_lista.json()
+        
+        achei_alessandra = False
+        for professor in lista_retornada:
+            if professor['nome'] == 'Alessandra':
+                achei_alessandra = True
+
+        self.assertFalse(achei_alessandra, "A professora Alessandra ainda está na lista de alunos.")
+
     def test_criar_professor(self):
         r = requests.post('http://127.0.0.1:5000/professor', json={
             'id':2,
             'nome':'Caio',
             'idade':26, 
             'materia': "Desenvolvimento de APIs",
-            'observacoes': "Flask"})
+            'observacoes': "Flask"
+            })
             
         if r.status_code != 201:
             self.fail(f"Erro ao criar professor Caio. Status Code: {r.status_code}")
@@ -132,6 +162,30 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo ativo informado é obrigatório.', r.json()['error'])
 
+    def test_delete_turma(self): 
+        r = requests.post('http://127.0.0.1:5000/turma', json={
+            'id': 4,
+            'descricao': 'Literatura portuguesa',
+            'professor_id': 3,
+            'ativo': "Ativo"
+        })
+        if r.status_code != 201:
+            self.fail(f"Erro ao criar turma História Moderna. Status Code: {r.status_code}")
+
+        r = requests.delete('http://127.0.0.1:5000/turma/4')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Turma com ID 4 foi removida com sucesso', r.json()['message'])
+
+        r_lista = requests.get('http://127.0.0.1:5000/turma')
+        lista_retornada = r_lista.json()
+        achei_historia = False
+        for turma in lista_retornada:
+            if turma['descricao'] == 'Literatura portuguesa':
+                achei_historia = True
+
+        self.assertFalse(achei_historia, "A turma Literatura portuguesa ainda está na lista de turmas.")
+
+
     def test_criar_turma(self):
         r = requests.post('http://127.0.0.1:5000/turma', json={
             'id':2,
@@ -182,7 +236,7 @@ class TestStringMethods(unittest.TestCase):
         
         self.assertEqual(type(obj_retornado),type([]))
 
-    def test_campo_nome_null(self):
+    def test_campo_aluno_nome_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': None,
@@ -196,7 +250,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo nome informado é obrigatório.', r.json()['error'])
     
-    def test_campo_idade_null(self):
+    def test_campo_aluno_idade_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Manuela',
@@ -210,7 +264,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo idade informado é obrigatório.', r.json()['error'])
 
-    def test_campo_datanasc_null(self):
+    def test_campo_aluno_datanasc_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Angelina',
@@ -224,7 +278,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo data_nascimento informado é obrigatório.', r.json()['error'])
 
-    def test_campo_nota_primeiro_semestre_null(self):
+    def test_campo_aluno_nota_primeiro_semestre_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Beatriz',
@@ -238,7 +292,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo nota_primeiro_semestre informado é obrigatório.', r.json()['error'])
 
-    def test_campo_nota_segundo_semestre_null(self):
+    def test_campo_aluno_nota_segundo_semestre_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Bianca',
@@ -252,7 +306,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo nota_segundo_semestre informado é obrigatório.', r.json()['error'])
 
-    def test_campo_media_final_null(self):
+    def test_campo_aluno_media_final_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Beatriz',
@@ -266,7 +320,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo media_final informado é obrigatório.', r.json()['error'])
     
-    def test_campo_turma_id_null(self):
+    def test_campo_aluno_turma_id_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
             'nome': 'Beatriz',
@@ -279,6 +333,39 @@ class TestStringMethods(unittest.TestCase):
         })
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo turma_id informado é obrigatório.', r.json()['error'])
+
+    def test_delete_aluno(self): 
+        r = requests.post('http://127.0.0.1:5000/alunos', json={
+            'id': 6,
+            'nome': 'Matheus',
+            'idade': 19,
+            'data_nascimento': "13/05/2005",
+            'nota_primeiro_semestre': 9,
+            'nota_segundo_semestre': 8,
+            'media_final': 8.5,
+            'turma_id': 1
+        })
+        if r.status_code != 201:
+            self.fail(f"Erro ao criar aluno Matheus. Status Code: {r.status_code}")
+
+        aluno_criado = r.json()
+        aluno_id = aluno_criado['id']
+
+        r = requests.delete(f'http://127.0.0.1:5000/alunos/{aluno_id}')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Aluno com ID', r.json()['message'])
+
+        r_lista = requests.get('http://127.0.0.1:5000/alunos')
+        self.assertEqual(r_lista.status_code, 200)
+        lista_retornada = r_lista.json()
+
+        achei_matheus = False
+        for aluno in lista_retornada:
+            if aluno['nome'] == 'Matheus':
+                achei_matheus = True
+
+        self.assertFalse(achei_matheus, "O aluno Matheus ainda está na lista de alunos.")
+
 
     def test_criar_aluno(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
