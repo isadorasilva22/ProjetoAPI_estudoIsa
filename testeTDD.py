@@ -132,6 +132,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(type(obj_retornado),type([]))   
 
 
+# TURMA
+
     def test_campo_turma_descricao_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             "id": '',
@@ -235,6 +237,9 @@ class TestStringMethods(unittest.TestCase):
             self.fail("Era esperado um objeto JSON")
         
         self.assertEqual(type(obj_retornado),type([]))
+
+
+# ALUNO
 
     def test_campo_aluno_nome_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
