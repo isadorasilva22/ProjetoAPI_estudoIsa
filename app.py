@@ -201,6 +201,36 @@ def updateTurma(idTurma):
         return jsonify({"error": str(e)}), 500
 
 
+#DELETE
+@app.route('/alunos/<int:idAluno>', methods=['DELETE'])
+def delete_aluno(idAluno):
+    alunos = dici["alunos"]
+    for indice,aluno in enumerate(alunos):
+           if aluno.get('id') == idAluno:
+            del alunos[indice]
+            return jsonify("Aluno excluído com sucesso", alunos), 200
+    return ("Aluno não encontrado"), 404
+    
+        
+@app.route('/professor/<int:idProfessor>', methods=['DELETE'])
+def delete_professor(idProfessor):
+    professores = dici["professor"]
+    for indice,professor in enumerate(professores):
+        if professor.get('id') == idProfessor:
+            del professores[indice]
+            return jsonify ("Deu certo", professor), 200
+    return jsonify("Professor não encontrado"), 404
+
+
+@app.route('/turma/<int:idTurma>', methods=['DELETE'])
+def delete_turma(idTurma):
+    turmas = dici["turma"]
+    for indice,turma in enumerate(turmas):
+        if turma.get('id') == idTurma:
+            del turmas[indice]
+            return("Turma excluida com sucesso"), 200
+    return ("Turma não encontrada"), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
