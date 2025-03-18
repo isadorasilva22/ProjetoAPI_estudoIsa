@@ -1,139 +1,236 @@
 from flask import Flask, jsonify, request
-#app.debbug
-#Dicionário
 
 dici = {
-    "alunos":[
+    "alunos": [
         {
-            "id":1,
-            "nome":"caio",
-            "idade": 25,
-            "turma_id": 3,
-            "data_nascimento": "10/10/2005",
-            "nota_primeiro_semestre": 10.00,
-            "nota_segundo_semestre": 9.00,
-            "media_final": 9.00
+            "id": 1,
+            "nome": "Nome do aluno",
+            "idade": 0,
+            "data_nascimento": "Data de nascimento",
+            "nota_primeiro_semestre": 0,
+            "nota_segundo_semestre": 0,
+            "media_final": 0,
+            "turma_id": 1
         }
     ],
-
-    "professor":[
+    "professor": [
         {
-            "id":2,
-            "nome":"rafael",
-            "idade": 15,
-            "materia": "Desenvolvimento web",
-            "observacoes": "Gosto de lesionar"
+            "id": 1,
+            "nome": "Nome do professor",
+            "idade": 0,
+            "materia": "Nome da materia",
+            "observacoes": "Observacao sobre o professor"
         }
     ],
-
-     "turma":[
+    "turma": [
         {
-            "id":3,
-            "descricao":"api's",
-            "professor_id":2,
-            "ativo": "Ativa"
+            "id": 1,
+            "descricao": "Descriçaõ da turma",
+            "professor_id": 1,
+            "ativo": "Status"
         }
     ]
 }
 
-app = Flask(__name__) #Criação de uma instância da classe Flask. __name__ representa o nome do módulo atual
+app = Flask(__name__)
 
+def verificar_duplicacao(id, lista, tipo):
+    if any(item['id'] == id for item in lista):
+        return jsonify({"error": f"{tipo} com ID {id} já existe."}), 400
+    return None
 
-#POST (CREATE)
-@app.route('/alunos',methods=['POST'])
+def verificar_campo_null(dados):
+    for chave, valor in dados.items():
+        if valor == None:
+            return jsonify({"error": "O campo " + chave + " informado é obrigatório."})
+        
+# POST (CREATE)
+@app.route('/alunos', methods=['POST'])
 def createAluno():
-    dados = request.json
-    print(dados)
-    for turma in dici["turma"]:
-        if turma["id"] == dados["turma_id"]:
-            dici['alunos'].append(dados)
-            return jsonify(dados)
-        else:
-            return jsonify(["Não foi possível inserir o aluno na turma."])
+    try:
+        dados = request.json
+        
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
 
         
+        turma_existente = next((turma for turma in dici["turma"] if turma["id"] == dados["turma_id"]), None)
+        if not turma_existente:
+            return jsonify({"error": "Turma não encontrada."}), 404
+        
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["alunos"], "Aluno")
+        if duplicacao:
+            return duplicacao
+        
 
+        # dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
+        dici['alunos'].append(dados)
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-
-@app.route('/professor',methods=['POST'])
+@app.route('/professor', methods=['POST'])
 def createProfessores():
-    dados = request.json
-    dici['professor'].append(dados)
-    return jsonify(dados)
+    try:
+        dados = request.json
+        # dados['id'] = max([professor['id'] for professor in dici["professor"]]) + 1 if dici["professor"] else 1
 
-@app.route('/turma',methods=['POST'])
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["professor"], "Professor")
+        if duplicacao:
+            return duplicacao
+        
+        dici['professor'].append(dados)
+        
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/turma', methods=['POST'])
 def createTurma():
-    dados = request.json
-    print(dados)
+    try:
+        dados = request.json
 
-    for professor in dici["professor"]:
-        if professor["id"] == dados["professor_id"]:
-            dici['turma'].append(dados)
-            return jsonify(dados)
-        else:
-            return jsonify(["Não foi possível cadastrar o professor na turma."])
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
+        
+        professor_existente = next((professor for professor in dici["professor"] if professor["id"] == dados["professor_id"]), None)
+        if not professor_existente:
+            return jsonify({"error": "Professor não encontrado."}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["turma"], "Turma")
+        if duplicacao:
+            return duplicacao
 
-#GET(READ)
-@app.route('/alunos', methods=['GET']) #define a rota para a api - precisa obrigatoriamente de uma função
+        # dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
+        dici['turma'].append(dados)
+        return jsonify(dados), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# GET (READ)
+@app.route('/alunos', methods=['GET'])
 def getAluno():
     dados = dici['alunos']
-    return jsonify(dados) #retorna os dados em formato json
+    return jsonify(dados)
 
 @app.route("/professor", methods=['GET'])
 def getProfessor():
     dados = dici['professor']
     return jsonify(dados)
 
-@app.route ('/turma', methods=['GET'])
+@app.route('/turma', methods=['GET'])
 def getTurma():
     dados = dici['turma']
     return jsonify (dados)
 
-#PUT(UPDATE)
+# PUT (UPDATE)
 @app.route("/alunos/<int:idAluno>", methods=['PUT'])
 def updateAlunos(idAluno):
-    alunos = dici["alunos"]
-    for aluno in alunos:
-        if aluno['id'] == idAluno:
-            dados = request.json
-            aluno["id"] = dados['id']
-            aluno['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Aluno não encontrado")
+    try:
+        dados = request.json
         
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
+        
+        aluno = next((aluno for aluno in dici["alunos"] if aluno["id"] == idAluno), None)
+        if not aluno:
+            return jsonify({"error": "Aluno nao encontrado"}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["alunos"], "Aluno")
+        if duplicacao:
+            return duplicacao
+        
+        dados = request.json
+        aluno.update(dados)
+        return jsonify(aluno)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/professor/<int:idProfessor>", methods=['PUT'])
 def updateProfessores(idProfessor):
-    professor = dici["professor"]
-    for professor in professor :
-        if professor['id'] == idProfessor:
-            dados = request.json
-            professor["id"] = dados['id']
-            professor['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Professor não encontrado")
+    try:
+        dados = request.json
+
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
         
+        professor = next((professor for professor in dici["professor"] if professor["id"] == idProfessor), None)
+        if not professor:
+            return jsonify({"error": "Professor não encontrado"}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["professor"], "Professor")
+        if duplicacao:
+            return duplicacao
+        
+        
+        professor.update(dados)
+        return jsonify(professor)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/turma/<int:idTurma>", methods=['PUT'])
 def updateTurma(idTurma):
-    turmas = dici["Turma"]
-    for turma in turmas:
-        if turma['id'] == idTurma:
-            dados = request.json
-            turma["id"] = dados['id']
-            turma['nome'] = dados['nome']
-            return jsonify(dados)
-        else:
-            return jsonify("Turma não encontrada")
+    try:
+        dados = request.json
+
+        vazio = verificar_campo_null(dados)
+        if vazio:
+            return vazio, 400
         
+        turma = next((turma for turma in dici["turma"] if turma["id"] == idTurma), None)
+        if not turma:
+            return jsonify({"error": "Turma não encontrada"}), 404
+        
+        duplicacao = verificar_duplicacao(dados['id'], dici["turma"], "Turma")
+        if duplicacao:
+            return duplicacao
+        
+        
+        turma.update(dados)
+        return jsonify(turma)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-if __name__ == '__main__': #Verifica se está sendo executado pelo python
-    app.run(debug=True) #Se estiver sendo executado, ent app.run inicia o servidor de desenv do flask
-#O argumento debug=True ativa o modo de depuração, o que é útil durante o desenvolvimento, pois fornece mensagens de erro detalhadas e reinicia
-#automaticamente o servidor quando o código é alterado.
+#DELETE
+@app.route('/alunos/<int:idAluno>', methods=['DELETE'])
+def delete_aluno(idAluno):
+    alunos = dici["alunos"]
+    for indice,aluno in enumerate(alunos):
+           if aluno.get('id') == idAluno:
+            del alunos[indice]
+            return jsonify("Aluno excluído com sucesso", alunos), 200
+    return ("Aluno não encontrado"), 404
+    
+        
+@app.route('/professor/<int:idProfessor>', methods=['DELETE'])
+def delete_professor(idProfessor):
+    professores = dici["professor"]
+    for indice,professor in enumerate(professores):
+        if professor.get('id') == idProfessor:
+            del professores[indice]
+            return jsonify ("Deu certo", professor), 200
+    return jsonify("Professor não encontrado"), 404
 
 
+@app.route('/turma/<int:idTurma>', methods=['DELETE'])
+def delete_turma(idTurma):
+    turmas = dici["turma"]
+    for indice,turma in enumerate(turmas):
+        if turma.get('id') == idTurma:
+            del turmas[indice]
+            return("Turma excluida com sucesso"), 200
+    return ("Turma não encontrada"), 404
 
-# Todos do grupo vai ter que fazer esse processo
-#vai ter que ter 3 post(create), delete, get(read), put(update) - crud para professor, aluno e turma
+
+if __name__ == '__main__':
+    app.run(debug=True)
