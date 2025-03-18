@@ -334,45 +334,45 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo turma_id informado é obrigatório.', r.json()['error'])
     
-    # def test_update_aluno_successo(self):
-    #     r = requests.post('http://127.0.0.1:5000/alunos', json={ #descobrir pq o "r" está apagado
-    #         "id": 10,
-    #         "nome": "Joao",
-    #         "idade": 20,
-    #         "data_nascimento": "2005-02-01",
-    #         "nota_primeiro_semestre": 8.0,
-    #         "nota_segundo_semestre": 9.0,
-    #         "media_final": 8.5,
-    #         "turma_id": 1
-    #     })
+    def test_update_aluno_successo(self):
+        r = requests.post('http://127.0.0.1:5000/alunos', json={ 
+            "id": 10,
+            "nome": "Joao",
+            "idade": 20,
+            "data_nascimento": "2005-02-01",
+            "nota_primeiro_semestre": 8.0,
+            "nota_segundo_semestre": 9.0,
+            "media_final": 8.5,
+            "turma_id": 1
+        })
 
-    #     print("POST Response:", r.status_code, r.text)
-    #     assert r.status_code in [200, 201]
+       
+        assert r.status_code in [200, 201]
 
-    #     updated_r = {
-    #         "nome": "Joao Silva",
-    #         "idade": 21,
-    #         "data_nascimento": "2004-12-01",
-    #         "nota_primeiro_semestre": 8.5,
-    #         "nota_segundo_semestre": 9.2,
-    #         "media_final": 8.75,
-    #         "turma_id": 1
-    #     }
+        updated_r = {
+            "id": 10,
+            "nome": "Joao Silva",
+            "idade": 21,
+            "data_nascimento": "2004-12-01",
+            "nota_primeiro_semestre": 8.5,
+            "nota_segundo_semestre": 9.2,
+            "media_final": 8.75,
+            "turma_id": 1
+        }
         
-    #     response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"Content-Type": "application/json"})
-    #     print("PUT Response:", response.status_code, response.text)
+        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"Content-Type": "application/json"})
+       
 
-    #     #tá faltando um get
-    #     assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+        #tá faltando um get
+        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
 
-    #     updated_aluno = response.json()
-    #     assert updated_aluno['nome'] == "João Silva"
-    #     assert updated_aluno['idade'] == 21
-    #     assert updated_aluno['media_final'] == 8.75
+        updated_aluno = response.json()
+        assert updated_aluno['nome'] == "Joao Silva"
+        assert updated_aluno['idade'] == 21
+        assert updated_aluno['media_final'] == 8.75
         
-    #     get_response = requests.get('http://127.0.0.1:5000/alunos/10')
-    #     print("GET Response:", get_response.status_code, get_response.text)
-    #     assert get_response.status_code == 200
+        get_response = requests.get('http://127.0.0.1:5000/alunos')
+        assert get_response.status_code == 200
 
     def test_delete_aluno(self): 
         r = requests.post('http://127.0.0.1:5000/alunos', json={
@@ -391,8 +391,8 @@ class TestStringMethods(unittest.TestCase):
         aluno_criado = r.json()
         aluno_id = aluno_criado['id']
 
-        r = requests.delete(f'http://127.0.0.1:5000/alunos/6')
-        self.assertEqual(r.status_code, 404)
+        r = requests.delete(f'http://127.0.0.1:5000/alunos/{aluno_id}')
+        self.assertEqual(r.status_code, 200)
         self.assertIn('Aluno com ID', r.json()['message'])
 
         r_lista = requests.get('http://127.0.0.1:5000/alunos')
