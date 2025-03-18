@@ -59,7 +59,7 @@ class TestStringMethods(unittest.TestCase):
         })
 
        
-        assert r.status_code in [200, 201]
+        assert r.status_code in [200, 200]
 
         updated_r = {
             "id": 10,
@@ -91,7 +91,7 @@ class TestStringMethods(unittest.TestCase):
             'materia': "Geografia",
             'observacoes': "Altitude e latitude"
         })
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar professora Alessandra. Status Code: {r.status_code}")
 
         professor_criado = r.json()
@@ -121,7 +121,7 @@ class TestStringMethods(unittest.TestCase):
             'observacoes': "Flask"
             })
             
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar professor Caio. Status Code: {r.status_code}")
 
         r = requests.post('http://127.0.0.1:5000/professor', json={
@@ -132,7 +132,7 @@ class TestStringMethods(unittest.TestCase):
             'observacoes': "Operadores"})
         
             
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar professor Mariana. Status Code: {r.status_code}")
                 
         r_lista = requests.get('http://127.0.0.1:5000/professor')
@@ -207,7 +207,7 @@ class TestStringMethods(unittest.TestCase):
         })
 
        
-        assert r.status_code in [200, 201]
+        assert r.status_code in [200, 200]
 
         updated_r = {
             "id": 10,
@@ -237,7 +237,7 @@ class TestStringMethods(unittest.TestCase):
             'professor_id': 3,
             'ativo': "Ativo"
         })
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar turma História Moderna. Status Code: {r.status_code}")
 
         r = requests.delete('http://127.0.0.1:5000/turma/4')
@@ -261,7 +261,7 @@ class TestStringMethods(unittest.TestCase):
             'professor_id':2, 
             'ativo': "Ativo"})
             
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar turma Desenvolvimento de APIs. Status Code: {r.status_code}")
 
         r = requests.post('http://127.0.0.1:5000/turma', json={
@@ -270,7 +270,7 @@ class TestStringMethods(unittest.TestCase):
             'professor_id':3, 
             'ativo': "Ativo"})
             
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar turma Matemática Aplicada. Status Code: {r.status_code}")
                 
         r_lista = requests.get('http://127.0.0.1:5000/turma')
@@ -418,7 +418,7 @@ class TestStringMethods(unittest.TestCase):
         })
 
        
-        assert r.status_code in [200, 201]
+        assert r.status_code in [200, 200]
 
         updated_r = {
             "id": 10,
@@ -456,7 +456,7 @@ class TestStringMethods(unittest.TestCase):
             'media_final': 8.5,
             'turma_id': 1
         })
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar aluno Matheus. Status Code: {r.status_code}")
 
         aluno_criado = r.json()
@@ -489,7 +489,7 @@ class TestStringMethods(unittest.TestCase):
             'media_final': 8.5,
             'turma_id': 1
         })
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar aluno José. Status Code: {r.status_code}")
 
         r = requests.post('http://127.0.0.1:5000/alunos', json={
@@ -502,7 +502,7 @@ class TestStringMethods(unittest.TestCase):
             'media_final': 9,
             'turma_id': 1
         })
-        if r.status_code != 201:
+        if r.status_code != 200:
             self.fail(f"Erro ao criar aluna Letícia. Status Code: {r.status_code}")
             
         r_lista = requests.get('http://127.0.0.1:5000/alunos')

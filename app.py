@@ -67,7 +67,7 @@ def createAluno():
 
         # dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
         dici['alunos'].append(dados)
-        return jsonify(dados), 201
+        return jsonify(dados), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -87,7 +87,7 @@ def createProfessores():
         
         dici['professor'].append(dados)
         
-        return jsonify(dados), 201
+        return jsonify(dados), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -110,7 +110,7 @@ def createTurma():
 
         # dados['id'] = max([turma['id'] for turma in dici["turma"]]) + 1 if dici["turma"] else 1
         dici['turma'].append(dados)
-        return jsonify(dados), 201
+        return jsonify(dados), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
