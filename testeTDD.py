@@ -249,7 +249,7 @@ class TestStringMethods(unittest.TestCase):
         })
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo nome informado é obrigatório.', r.json()['error'])
-    
+
     def test_campo_aluno_idade_null(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': '',
@@ -363,7 +363,6 @@ class TestStringMethods(unittest.TestCase):
         print("PUT Response:", response.status_code, response.text)
 
         #tá faltando um get
-
         assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
 
         updated_aluno = response.json()
