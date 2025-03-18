@@ -333,6 +333,37 @@ class TestStringMethods(unittest.TestCase):
         })
         self.assertEqual(r.status_code, 400)
         self.assertIn('O campo turma_id informado é obrigatório.', r.json()['error'])
+    
+    def test_update_aluno_successo(self):
+        r = requests.post('http://127.0.0.1:5000/alunos', json={
+            "id": 10,
+            "nome": "João",
+            "idade": 20,
+            "data_nascimento": "2005-02-01",
+            "nota_primeiro_semestre": 8.0,
+            "nota_segundo_semestre": 9.0,
+            "media_final": 8.5,
+            "turma_id": 1
+        })
+
+       
+        updated_r = {
+            "nome": "João Silva",
+            "idade": 21,
+            "data_nascimento": "2004-12-01",
+            "nota_primeiro_semestre": 8.5,
+            "nota_segundo_semestre": 9.2,
+            "media_final": 8.75,
+            "turma_id": 1
+        }
+        
+        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r)
+        
+        assert response.status_code == 200
+        updated_aluno = response.get_json()
+        assert updated_aluno['nome'] == "João Silva"
+        assert updated_aluno['idade'] == 21
+        assert updated_aluno['media_final'] == 8.75
 
     def test_delete_aluno(self): 
         r = requests.post('http://127.0.0.1:5000/alunos', json={
@@ -366,7 +397,7 @@ class TestStringMethods(unittest.TestCase):
 
         self.assertFalse(achei_matheus, "O aluno Matheus ainda está na lista de alunos.")
 
-
+    
     def test_criar_aluno(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={
             'id': 4,
