@@ -337,7 +337,7 @@ class TestStringMethods(unittest.TestCase):
     def test_update_aluno_successo(self):
         r = requests.post('http://127.0.0.1:5000/alunos', json={ #descobrir pq o "r" está apagado
             "id": 10,
-            "nome": "João",
+            "nome": "Joao",
             "idade": 20,
             "data_nascimento": "2005-02-01",
             "nota_primeiro_semestre": 8.0,
@@ -346,9 +346,11 @@ class TestStringMethods(unittest.TestCase):
             "turma_id": 1
         })
 
-       
+        print("POST Response:", r.status_code, r.text)
+        assert r.status_code in [200, 201]
+
         updated_r = {
-            "nome": "João Silva",
+            "nome": "Joao Silva",
             "idade": 21,
             "data_nascimento": "2004-12-01",
             "nota_primeiro_semestre": 8.5,
@@ -357,17 +359,21 @@ class TestStringMethods(unittest.TestCase):
             "turma_id": 1
         }
         
-        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"content-Type": "application/json"})
+        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"Content-Type": "application/json"})
+        print("PUT Response:", response.status_code, response.text)
 
         #tá faltando um get
 
         assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+
         updated_aluno = response.json()
-        assert updated_aluno['nome'] == "João"
+        assert updated_aluno['nome'] == "João Silva"
         assert updated_aluno['idade'] == 21
         assert updated_aluno['media_final'] == 8.75
         
-        
+        get_response = requests.get('http://127.0.0.1:5000/alunos/10')
+        print("GET Response:", get_response.status_code, get_response.text)
+        assert get_response.status_code == 200
 
     def test_delete_aluno(self): 
         r = requests.post('http://127.0.0.1:5000/alunos', json={
@@ -469,6 +475,8 @@ class TestStringMethods(unittest.TestCase):
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
         unittest.TextTestRunner(verbosity=2,failfast=True).run(suite)
+
+
 
 if __name__ == '__main__':
     runTests()
