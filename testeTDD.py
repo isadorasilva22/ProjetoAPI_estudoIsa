@@ -460,12 +460,6 @@ class TestStringMethods(unittest.TestCase):
         
         self.assertEqual(type(obj_retornado),type([]))
 
-        
-    
-
-
-
-
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
         unittest.TextTestRunner(verbosity=2,failfast=True).run(suite)
@@ -473,9 +467,6 @@ def runTests():
 if __name__ == '__main__':
     runTests()
  
-
-
-
 
 # Testar Atualizar
 # Testar Apagar

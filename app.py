@@ -65,7 +65,7 @@ def createAluno():
             return duplicacao
         
 
-        dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
+        # dados['id'] = max([aluno['id'] for aluno in dici["alunos"]]) + 1 if dici["alunos"] else 1
         dici['alunos'].append(dados)
         return jsonify(dados), 201
     except Exception as e:
@@ -204,41 +204,32 @@ def updateTurma(idTurma):
 #DELETE
 @app.route('/alunos/<int:idAluno>', methods=['DELETE'])
 def delete_aluno(idAluno):
-    try:
-        aluno = next((aluno for aluno in dici["alunos"] if aluno["id"] == idAluno), None)
-        if not aluno:
-            return jsonify({"error": "Aluno não encontrado"}), 404
-        
-        dici["alunos"].remove(aluno)
-        return jsonify({"message": f"Aluno com ID {idAluno} foi removido com sucesso."}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    alunos = dici["alunos"]
+    for indice,aluno in enumerate(alunos):
+           if aluno.get('id') == idAluno:
+            del alunos[indice]
+            return jsonify("Aluno excluído com sucesso", alunos), 200
+    return ("Aluno não encontrado"), 404
     
         
 @app.route('/professor/<int:idProfessor>', methods=['DELETE'])
 def delete_professor(idProfessor):
-    try:
-        professor = next((professor for professor in dici["professor"] if professor["id"] == idProfessor), None)
-        if not professor:
-            return jsonify({"error": "Professor não encontrado"}), 404
-        
-        dici["professor"].remove(professor)
-        return jsonify({"message": f"Professor com ID {idProfessor} foi removido com sucesso."}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
+    professores = dici["professor"]
+    for indice,professor in enumerate(professores):
+        if professor.get('id') == idProfessor:
+            del professores[indice]
+            return jsonify ("Deu certo", professor), 200
+    return jsonify("Professor não encontrado"), 404
+
 
 @app.route('/turma/<int:idTurma>', methods=['DELETE'])
 def delete_turma(idTurma):
-    try:
-        turma = next((turma for turma in dici["turma"] if turma["id"] == idTurma), None)
-        if not turma:
-            return jsonify({"error": "Turma não encontrada"}), 404
-        
-        dici["turma"].remove(turma)
-        return jsonify({"message": f"Turma com ID {idTurma} foi removida com sucesso."}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    turmas = dici["turma"]
+    for indice,turma in enumerate(turmas):
+        if turma.get('id') == idTurma:
+            del turmas[indice]
+            return("Turma excluida com sucesso"), 200
+    return ("Turma não encontrada"), 404
 
 
 if __name__ == '__main__':
