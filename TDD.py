@@ -6,7 +6,7 @@ class TestStringMethods(unittest.TestCase):
 
 
     def test_campo_professor_nome_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "nome": None,
             "idade": 0,
@@ -17,7 +17,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo nome informado é obrigatório.', r.json()['error'])
 
     def test_campo_professor_idade_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "nome": "Priscilla",
             "idade": None,
@@ -28,7 +28,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo idade informado é obrigatório.', r.json()['error'])
 
     def test_campo_professor_materia_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "nome": "Marcos",
             "idade": 0,
@@ -39,7 +39,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo materia informado é obrigatório.', r.json()['error'])
 
     def test_campo_professor_obervacoes_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "nome": "Lima",
             "idade": 0,
@@ -50,7 +50,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo observacoes informado é obrigatório.', r.json()['error'])
 
     def test_update_professor_successo(self):
-        r = requests.post('http://127.0.0.1:5000/professor', json={ 
+        r = requests.post('http://127.0.0.1:8001/professor', json={ 
             "id": 10,
             "nome": "Romário",
             "idade": 30,
@@ -69,7 +69,7 @@ class TestStringMethods(unittest.TestCase):
             "observacoes": "Nenhuma"
         }
         
-        response = requests.put('http://127.0.0.1:5000/professor/10', json=updated_r, headers={"Content-Type": "application/json"})
+        response = requests.put('http://127.0.0.1:8001/professor/10', json=updated_r, headers={"Content-Type": "application/json"})
        
 
         #tá faltando um get
@@ -80,11 +80,11 @@ class TestStringMethods(unittest.TestCase):
         assert updated_professor['idade'] == 30
         assert updated_professor['materia'] == "Desenvolvimento Web"
         
-        get_response = requests.get('http://127.0.0.1:5000/professor')
+        get_response = requests.get('http://127.0.0.1:8001/professor')
         assert get_response.status_code == 200        
 
     def test_delete_professor(self): 
-        r = requests.post('http://127.0.0.1:5000/professor', json={
+        r = requests.post('http://127.0.0.1:8001/professor', json={
             'id':8,
             'nome':'Alessandra',
             'idade':63, 
@@ -97,11 +97,11 @@ class TestStringMethods(unittest.TestCase):
         professor_criado = r.json()
         professor_id = professor_criado['id']
 
-        r = requests.delete(f'http://127.0.0.1:5000/professor/{professor_id}')
+        r = requests.delete(f'http://127.0.0.1:8001/professor/{professor_id}')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Professor com ID', r.json()['message'])
+        self.assertIn('Professor excluído com sucesso', r.json()['message'])
 
-        r_lista = requests.get('http://127.0.0.1:5000/professor')
+        r_lista = requests.get('http://127.0.0.1:8001/professor')
         self.assertEqual(r_lista.status_code, 200)
         lista_retornada = r_lista.json()
         
@@ -113,7 +113,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertFalse(achei_alessandra, "A professora Alessandra ainda está na lista de alunos.")
 
     def test_criar_professor(self):
-        r = requests.post('http://127.0.0.1:5000/professor', json={
+        r = requests.post('http://127.0.0.1:8001/professor', json={
             'id':2,
             'nome':'Caio',
             'idade':26, 
@@ -124,7 +124,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar professor Caio. Status Code: {r.status_code}")
 
-        r = requests.post('http://127.0.0.1:5000/professor', json={
+        r = requests.post('http://127.0.0.1:8001/professor', json={
             'id':3,
             'nome':'Mariana',
             'idade':26, 
@@ -135,7 +135,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar professor Mariana. Status Code: {r.status_code}")
                 
-        r_lista = requests.get('http://127.0.0.1:5000/professor')
+        r_lista = requests.get('http://127.0.0.1:8001/professor')
         if r_lista.status_code != 200:
             self.fail(f"Erro ao obter a lista de professores. Status Code: {r_lista.status_code}")
                 
@@ -154,7 +154,7 @@ class TestStringMethods(unittest.TestCase):
             self.fail('Professora Matemática Aplicada não apareceu na lista de professores')
 
     def test_retorna_lista_professores(self):
-        r = requests.get('http://127.0.0.1:5000/professor')
+        r = requests.get('http://127.0.0.1:8001/professor')
         if r.status_code == 404:
             self.fail("Voce nao definiu a pagina '/professor' no seu server")
 
@@ -169,7 +169,7 @@ class TestStringMethods(unittest.TestCase):
 # TURMA
 
     def test_campo_turma_descricao_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "descricao": None,
             "professor_id": 1,
@@ -179,7 +179,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo descricao informado é obrigatório.', r.json()['error'])
 
     def test_campo_turma_professor_id_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "descricao": "testes rapidos",
             "professor_id": None,
@@ -189,7 +189,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo professor_id informado é obrigatório.', r.json()['error'])
 
     def test_campo_ativo_descricao_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             "id": '',
             "descricao": "Probabilidades",
             "professor_id": 1,
@@ -199,7 +199,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo ativo informado é obrigatório.', r.json()['error'])
 
     def test_update_turma_successo(self):
-        r = requests.post('http://127.0.0.1:5000/turma', json={ 
+        r = requests.post('http://127.0.0.1:8001/turma', json={ 
             "id": 10,
             "descricao": "Desenvolvimento Mobile",
             "professor_id": 1,
@@ -207,7 +207,7 @@ class TestStringMethods(unittest.TestCase):
         })
 
        
-        assert r.status_code in [200, 200]
+        assert r.status_code == 200
 
         updated_r = {
             "id": 10,
@@ -216,22 +216,22 @@ class TestStringMethods(unittest.TestCase):
             "ativo": "Desativado"
         }
         
-        response = requests.put('http://127.0.0.1:5000/turma/10', json=updated_r, headers={"Content-Type": "application/json"})
+        response = requests.put('http://127.0.0.1:8001/turma/10', json=updated_r, headers={"Content-Type": "application/json"})
        
 
         #tá faltando um get
-        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
+        assert response.status_code == 200 
 
         updated_turma = response.json()
         assert updated_turma['descricao'] == "Desenvolvimento Mobile - Kotlin"
         assert updated_turma['professor_id'] == 1
         assert updated_turma['ativo'] == "Desativado"
         
-        get_response = requests.get('http://127.0.0.1:5000/turma')
+        get_response = requests.get('http://127.0.0.1:8001/turma')
         assert get_response.status_code == 200 
 
     def test_delete_turma(self): 
-        r = requests.post('http://127.0.0.1:5000/turma', json={
+        r = requests.post('http://127.0.0.1:8001/turma', json={
             'id': 4,
             'descricao': 'Literatura portuguesa',
             'professor_id': 3,
@@ -240,11 +240,11 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar turma História Moderna. Status Code: {r.status_code}")
 
-        r = requests.delete('http://127.0.0.1:5000/turma/4')
+        r = requests.delete('http://127.0.0.1:8001/turma/4')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Turma com ID 4 foi removida com sucesso', r.json()['message'])
+        self.assertIn('Turma excluída com sucesso.', r.json()['message'])
 
-        r_lista = requests.get('http://127.0.0.1:5000/turma')
+        r_lista = requests.get('http://127.0.0.1:8001/turma')
         lista_retornada = r_lista.json()
         achei_historia = False
         for turma in lista_retornada:
@@ -255,7 +255,7 @@ class TestStringMethods(unittest.TestCase):
 
 
     def test_criar_turma(self):
-        r = requests.post('http://127.0.0.1:5000/turma', json={
+        r = requests.post('http://127.0.0.1:8001/turma', json={
             'id':2,
             'descricao':'Desenvolvimento de APIs',
             'professor_id':2, 
@@ -264,7 +264,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar turma Desenvolvimento de APIs. Status Code: {r.status_code}")
 
-        r = requests.post('http://127.0.0.1:5000/turma', json={
+        r = requests.post('http://127.0.0.1:8001/turma', json={
             'id':3,
             'descricao':'Matemática Aplicada',
             'professor_id':3, 
@@ -273,7 +273,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar turma Matemática Aplicada. Status Code: {r.status_code}")
                 
-        r_lista = requests.get('http://127.0.0.1:5000/turma')
+        r_lista = requests.get('http://127.0.0.1:8001/turma')
         if r_lista.status_code != 200:
             self.fail(f"Erro ao obter a lista de turmas. Status Code: {r_lista.status_code}")
                 
@@ -293,7 +293,7 @@ class TestStringMethods(unittest.TestCase):
 
 
     def test_retorna_lista_turma(self):
-        r = requests.get('http://127.0.0.1:5000/turma')
+        r = requests.get('http://127.0.0.1:8001/turma')
         if r.status_code == 404:
             self.fail("Voce nao definiu a pagina '/turma' no seu server")
 
@@ -308,7 +308,7 @@ class TestStringMethods(unittest.TestCase):
 # ALUNO
 
     def test_campo_aluno_nome_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': None,
             'idade': 20,
@@ -322,7 +322,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo nome informado é obrigatório.', r.json()['error'])
 
     def test_campo_aluno_idade_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Manuela',
             'idade': None,
@@ -336,7 +336,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo idade informado é obrigatório.', r.json()['error'])
 
     def test_campo_aluno_datanasc_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Angelina',
             'idade': 50,
@@ -350,7 +350,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo data_nascimento informado é obrigatório.', r.json()['error'])
 
     def test_campo_aluno_nota_primeiro_semestre_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Beatriz',
             'idade': 19,
@@ -364,7 +364,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo nota_primeiro_semestre informado é obrigatório.', r.json()['error'])
 
     def test_campo_aluno_nota_segundo_semestre_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Bianca',
             'idade': 19,
@@ -378,7 +378,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo nota_segundo_semestre informado é obrigatório.', r.json()['error'])
 
     def test_campo_aluno_media_final_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Beatriz',
             'idade': 19,
@@ -392,7 +392,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo media_final informado é obrigatório.', r.json()['error'])
     
     def test_campo_aluno_turma_id_null(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': '',
             'nome': 'Beatriz',
             'idade': 19,
@@ -406,7 +406,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIn('O campo turma_id informado é obrigatório.', r.json()['error'])
     
     def test_update_aluno_successo(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={ 
+        r = requests.post('http://127.0.0.1:8001/alunos', json={ 
             "id": 10,
             "nome": "Joao",
             "idade": 20,
@@ -417,8 +417,7 @@ class TestStringMethods(unittest.TestCase):
             "turma_id": 1
         })
 
-       
-        assert r.status_code in [200, 200]
+        assert r.status_code == 200
 
         updated_r = {
             "id": 10,
@@ -431,22 +430,21 @@ class TestStringMethods(unittest.TestCase):
             "turma_id": 1
         }
         
-        response = requests.put('http://127.0.0.1:5000/alunos/10', json=updated_r, headers={"Content-Type": "application/json"})
-       
+        response = requests.put('http://127.0.0.1:8001/alunos/10', json=updated_r, headers={"Content-Type": "application/json"})
+        assert response.status_code == 200
 
-        #tá faltando um get
-        assert response.status_code == 200 #Perguntar se o erro é na saída 200 ou no "response.status_code"
 
         updated_aluno = response.json()
         assert updated_aluno['nome'] == "Joao Silva"
         assert updated_aluno['idade'] == 21
         assert updated_aluno['media_final'] == 8.75
         
-        get_response = requests.get('http://127.0.0.1:5000/alunos')
+        get_response = requests.get('http://127.0.0.1:8001/alunos')
         assert get_response.status_code == 200
 
+
     def test_delete_aluno(self): 
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': 6,
             'nome': "Matheus",
             'idade': 19,
@@ -462,11 +460,11 @@ class TestStringMethods(unittest.TestCase):
         aluno_criado = r.json()
         aluno_id = aluno_criado['id']
 
-        r = requests.delete(f'http://127.0.0.1:5000/alunos/{aluno_id}')
+        r = requests.delete(f'http://127.0.0.1:8001/alunos/{aluno_id}')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Aluno com ID', r.json()['message'])
+        self.assertIn('Aluno excluído com sucesso', r.json()['message'])
 
-        r_lista = requests.get('http://127.0.0.1:5000/alunos')
+        r_lista = requests.get('http://127.0.0.1:8001/alunos')
         self.assertEqual(r_lista.status_code, 200)
         lista_retornada = r_lista.json()
 
@@ -479,7 +477,7 @@ class TestStringMethods(unittest.TestCase):
 
     
     def test_criar_aluno(self):
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': 4,
             'nome': 'José',
             'idade': 19,
@@ -490,9 +488,10 @@ class TestStringMethods(unittest.TestCase):
             'turma_id': 1
         })
         if r.status_code != 200:
+            print(r.content)
             self.fail(f"Erro ao criar aluno José. Status Code: {r.status_code}")
 
-        r = requests.post('http://127.0.0.1:5000/alunos', json={
+        r = requests.post('http://127.0.0.1:8001/alunos', json={
             'id': 5,
             'nome': 'Letícia',
             'idade': 19,
@@ -505,7 +504,7 @@ class TestStringMethods(unittest.TestCase):
         if r.status_code != 200:
             self.fail(f"Erro ao criar aluna Letícia. Status Code: {r.status_code}")
             
-        r_lista = requests.get('http://127.0.0.1:5000/alunos')
+        r_lista = requests.get('http://127.0.0.1:8001/alunos')
         if r_lista.status_code != 200:
             self.fail(f"Erro ao obter a lista de alunos. Status Code: {r_lista.status_code}")
             
@@ -525,7 +524,7 @@ class TestStringMethods(unittest.TestCase):
 
     
     def test_retorna_lista_alunos(self):
-        r = requests.get('http://127.0.0.1:5000/alunos')
+        r = requests.get('http://127.0.0.1:8001/alunos')
         if r.status_code == 404:
             return self.fail("Voce nao definiu a pagina '/alunos' no seu server")
             
@@ -540,12 +539,8 @@ def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
         unittest.TextTestRunner(verbosity=2,failfast=True).run(suite)
 
-
-
 if __name__ == '__main__':
     runTests()
- 
 
-# Testar Atualizar
-# Testar Apagar
-# Testar reseta
+
+ 

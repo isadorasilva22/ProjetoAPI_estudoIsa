@@ -1,0 +1,38 @@
+dici = {
+    "alunos": [
+        {
+            "id": 1,
+            "nome": "Nome do aluno",
+            "idade": 0,
+            "data_nascimento": "Data de nascimento",
+            "nota_primeiro_semestre": 0,
+            "nota_segundo_semestre": 0,
+            "media_final": 0,
+            "turma_id": 1
+        }
+    ]
+}
+
+dici = {
+    "turma": [
+        {
+            "id": 1,
+            "descricao": "Descriçaõ da turma",
+            "professor_id": 1,
+            "ativo": "Status"
+        }
+    ]
+}
+
+
+dici = {
+    "professor": [
+        {
+            "id": 1,
+            "nome": "Nome do professor",
+            "idade": 0,
+            "materia": "Nome da materia",
+            "observacoes": "Observacao sobre o professor"
+        }
+    ]
+}

@@ -1,8 +1,22 @@
-# ProjetoAPI
+# Projeto_API
 
-Criar um projeto Flask. - OK
-Implementar rotas para CRUD das entidades. - FAZER
-Retornar respostas em formato JSON. -VER
-Testar as requisições utilizando Postman ou outra ferramenta similar - !!!
-Criar um repositório e fazer o controle de versão.  
+Projeto Flask
 
+# Objetivo
+
+Este projeto tem como objetivo apresentar a eficiência do framework Flask na linguagem Python, colocando em prática conceitos como Interface de Programação de Aplicações (API 's), dicionários, programação orientada a objetos, TDD (Test-Driven Development) e MVC.
+
+# Status
+
+Em andamento
+
+# Instalação
+
+git clone https://github.com/beatrizbramont/ProjetoAPI.git
+
+pip install -r requirements.txt
+
+# Tecnologias Usadas
+
+- Python
+- Flask
