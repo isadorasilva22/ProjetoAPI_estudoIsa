@@ -1,3 +1,8 @@
+# Contém:
+# Configurações do banco de dados
+# Chaves secretas 
+# Outras variáveis de ambiente necessárias para o funcionamento da aplicação.​
+
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

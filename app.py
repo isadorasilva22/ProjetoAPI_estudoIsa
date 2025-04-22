@@ -1,3 +1,9 @@
+# Contém:
+# Importações necessárias do Flask
+# Inicialização da aplicação Flask
+# Definição das rotas principais da API
+# Execução da aplicação com app.run()
+
 import os
 from config import app, db
 from controller.routesAlunos import alunos_bp

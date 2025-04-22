@@ -1,3 +1,8 @@
+# Define:
+# As estruturas das tabelas do banco de dados
+# As relações entre diferentes entidades
+# Métodos para manipulação e validação de dados
+
 from flask import jsonify
 from config import db
 

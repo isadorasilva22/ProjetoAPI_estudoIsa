@@ -1,3 +1,7 @@
+# Recebe requisições HTTP
+# Interage com os modelos para acessar ou modificar dados
+# Retorna repostas apropriadas ao cliente
+
 from flask import Blueprint, request, jsonify
 from models import modelTurma
 
