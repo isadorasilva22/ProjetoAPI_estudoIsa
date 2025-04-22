@@ -3,11 +3,16 @@
 # As relações entre diferentes entidades
 # Métodos para manipulação e validação de dados
 
+# Os arquivos de modelo usam a variável db que foi criada no config.py com SQLAlchemy(app). 
+# Isso conecta os modelos diretamente ao banco de dados configurado lá (no caso, um banco SQLite chamado app.db). 
+# Cada modelo define classes que herdam de db.Model, permitindo criar tabelas no banco com campos como id, nome, etc.
+
 from flask import jsonify
 from models.modelTurma import turmaPorID
 from config import db
 from datetime import datetime
 
+#Classe que herda de db.Model (do SQLAlchemy)
 class Aluno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))
