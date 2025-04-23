@@ -18,7 +18,7 @@ app.config['DEBUG'] = True      # habilita o modo debug
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"  # usa SQLcom URL apropriada
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False        # evita alertas desnecessários
-# mysql://<username>:<password>@<host>/<db_name> - Perguntar!
+# mysql://<username>:<password>@<host>/<db_name> - usar se alterar para o sql
 
 # Criação do objeto db: conecta o SQLAlchemy com a aplicação Flask.
 db = SQLAlchemy(app)
